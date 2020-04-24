@@ -1,23 +1,17 @@
 package com.slidetonew;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -31,30 +25,79 @@ import com.bumptech.glide.request.target.Target;
 
 import io.supercharge.shimmerlayout.ShimmerLayout;
 
-public class NewsAdapter extends ListAdapter<BBM54PGAwangning, MyViewHolder> {
-    NewsAdapter(){
+public class NewsAdapter extends ListAdapter<NewsItem, MyViewHolder> {
+    private static final int NORMAL_VIEW_TYPE = 0;
+    private static final int FOOTER_VIEW_TYPE = 1;
+    int footerViewStatus = NewsViewModel.STATUS_LOAD_MORE;
+
+    NewsViewModel model;
+    NewsAdapter(NewsViewModel viewModel){
         super(DIFF_CALLBACK);
+        model = viewModel;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_cell, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        MyViewHolder holder = null;
+        if (viewType == NORMAL_VIEW_TYPE){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_cell, parent, false);
+            holder = new MyViewHolder(view);
+            MyViewHolder finalHolder = holder;
+            holder.itemView.setOnClickListener(v -> {
                 //把新闻url存到bundle，用新fragment读取打开
                 Bundle bundle = new Bundle();
-                bundle.putString("contentUrl", getItem(holder.getAdapterPosition()).getUrl());
+                bundle.putString("contentUrl", getItem(finalHolder.getLayoutPosition()).getUrl());
                 Navigation.findNavController(v).navigate(R.id.action_newsFragment_to_newsContentFragment, bundle);
 
-            }
-        });
+            });
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footerlayout, parent, false);
+            holder = new MyViewHolder(view);
+            MyViewHolder finalHolder1 = holder;
+            view.setOnClickListener(v -> {
+                finalHolder1.progressBar.setVisibility(View.VISIBLE);
+                finalHolder1.statusText.setText("正在加载");
+                model.fetData();
+            });
+        }
         return holder;
     }
 
     @Override
+    public int getItemCount() {
+        return super.getItemCount() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        //根据位置返回视图类型
+        return position == (getItemCount()-1)?  FOOTER_VIEW_TYPE: NORMAL_VIEW_TYPE;
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+        //最后一个为尾视图
+        if (position == getItemCount() -1){
+            switch (footerViewStatus){
+                case NewsViewModel.STATUS_LOAD_MORE:
+                    holder.progressBar.setVisibility(View.VISIBLE);
+                    holder.statusText.setText("正在加载");
+                    holder.itemView.setClickable(false);
+                    break;
+                case NewsViewModel.STATUS_NO_MORE:
+                    holder.progressBar.setVisibility(View.GONE);
+                    holder.statusText.setText("没有更多新闻了");
+                    holder.itemView.setClickable(false);
+                    break;
+                default:
+                    holder.progressBar.setVisibility(View.GONE);
+                    holder.statusText.setText("网络错误，点击重试");
+                    holder.itemView.setClickable(true);
+                    break;
+            }
+            return;
+        }
         //某些新闻不带url链接，不显示
         String contentUrl = getItem(position).getUrl();
         if (contentUrl.contains("http")){
@@ -92,20 +135,23 @@ public class NewsAdapter extends ListAdapter<BBM54PGAwangning, MyViewHolder> {
         } else {
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.height = 0;
+            params.setMargins(0,0,0,0);
             holder.itemView.setLayoutParams(params);
             holder.itemView.setVisibility(View.GONE);
         }
 
+
     }
 
-    private static final DiffUtil.ItemCallback<BBM54PGAwangning> DIFF_CALLBACK = new DiffUtil.ItemCallback<BBM54PGAwangning>() {
+    //比较是否相同
+    private static final DiffUtil.ItemCallback<NewsItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<NewsItem>() {
         @Override
-        public boolean areItemsTheSame(@NonNull BBM54PGAwangning oldItem, @NonNull BBM54PGAwangning newItem) {
+        public boolean areItemsTheSame(@NonNull NewsItem oldItem, @NonNull NewsItem newItem) {
             return oldItem == newItem;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull BBM54PGAwangning oldItem, @NonNull BBM54PGAwangning newItem) {
+        public boolean areContentsTheSame(@NonNull NewsItem oldItem, @NonNull NewsItem newItem) {
             return oldItem.getDocid().equals(newItem.getDocid());
         }
     };
@@ -117,6 +163,8 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     TextView newsTitle;
     TextView publish;
     TextView postTime;
+    ProgressBar progressBar;
+    TextView statusText;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -125,5 +173,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         newsTitle = itemView.findViewById(R.id.newsTitle);
         publish = itemView.findViewById(R.id.publish);
         postTime = itemView.findViewById(R.id.postTime);
+        progressBar =itemView.findViewById(R.id.progressBar);
+        statusText = itemView.findViewById(R.id.statusText);
     }
 }

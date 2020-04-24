@@ -11,12 +11,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{
     NewsViewModel viewModel =  ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(NewsViewModel.class);
+    NewsAdapter adapter = new NewsAdapter(viewModel);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,6 @@ public class MainActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
         Spinner spinner = findViewById(R.id.spinner);
 
         @SuppressLint("ResourceType")
@@ -39,15 +40,15 @@ public class MainActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        Log.d("type", viewModel.getType().getValue());
+                        if (!Objects.equals(viewModel.getType().getValue(), "BBM54PGAwangning")){
+                            viewModel.type.setValue("BBM54PGAwangning");
+                        }
                         break;
                     case 1:
                         viewModel.type.setValue("BA10TA81wangning");
-                        Log.d("type", viewModel.getType().getValue());
                         break;
                     default:
                         viewModel.type.setValue("BA8E6OEOwangning");
-                        Log.d("type", viewModel.getType().getValue());
                         break;
                 }
             }

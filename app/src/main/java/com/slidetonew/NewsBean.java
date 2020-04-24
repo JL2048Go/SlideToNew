@@ -4,13 +4,86 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 class NewsBean {
-    private List<BBM54PGAwangning> BBM54PGAwangning;
+    //头条
+    private List<NewsItem> BBM54PGAwangning;
+    //娱乐
+    private List<NewsItem> BA10TA81wangning;
+    //体育
+    private List<NewsItem> BA8E6OEOwangning;
+    //财经
+    private List<NewsItem> BA8EE5GMwangning;
+    //军事
+    private List<NewsItem> BAI67OGGwangning;
+    //科技
+    private List<NewsItem> BA8D4A3Rwangning;
+    //手机
+    private List<NewsItem> BAI6I0O5wangning;
+    //数码
+    private List<NewsItem> BAI6JOD9wangning;
+    //时尚
+    private List<NewsItem> BA8F6ICNwangning;
+    //游戏
+    private List<NewsItem> BAI6RHDKwangning;
+    //教育
+    private List<NewsItem> BA8FF5PRwangning;
+    //健康
+    private List<NewsItem> BDC4QSV3wangning;
+    //旅游
+    private List<NewsItem> BEO4GINLwangning;
 
-    List<BBM54PGAwangning> getBbm54PGAwangnings() {
-        return this.BBM54PGAwangning;
+    public List<NewsItem> getBBM54PGAwangning() {
+        return BBM54PGAwangning;
+    }
+
+    public List<NewsItem> getBA10TA81wangning() {
+        return BA10TA81wangning;
+    }
+
+    public List<NewsItem> getBA8E6OEOwangning() {
+        return BA8E6OEOwangning;
+    }
+
+    public List<NewsItem> getBA8EE5GMwangning() {
+        return BA8EE5GMwangning;
+    }
+
+    public List<NewsItem> getBAI67OGGwangning() {
+        return BAI67OGGwangning;
+    }
+
+    public List<NewsItem> getBA8D4A3Rwangning() {
+        return BA8D4A3Rwangning;
+    }
+
+    public List<NewsItem> getBAI6I0O5wangning() {
+        return BAI6I0O5wangning;
+    }
+
+    public List<NewsItem> getBAI6JOD9wangning() {
+        return BAI6JOD9wangning;
+    }
+
+    public List<NewsItem> getBA8F6ICNwangning() {
+        return BA8F6ICNwangning;
+    }
+
+    public List<NewsItem> getBAI6RHDKwangning() {
+        return BAI6RHDKwangning;
+    }
+
+    public List<NewsItem> getBA8FF5PRwangning() {
+        return BA8FF5PRwangning;
+    }
+
+    public List<NewsItem> getBDC4QSV3wangning() {
+        return BDC4QSV3wangning;
+    }
+
+    public List<NewsItem> getBEO4GINLwangning() {
+        return BEO4GINLwangning;
     }
 }
-class BBM54PGAwangning{
+class NewsItem {
     /*
     * "liveInfo":null,
       "docid":"F9MKJGVI05503FCU",
@@ -171,17 +244,6 @@ class BBM54PGAwangning{
     public void setUrl(String url) {
         this.url = url;
     }
-
-    public String getImgsrc() {
-        return imgsrc;
-    }
-
-    public void setImgsrc(String imgsrc) {
-        this.imgsrc = imgsrc;
-    }
-}
-class imgextra{
-    String imgsrc;
 
     public String getImgsrc() {
         return imgsrc;
