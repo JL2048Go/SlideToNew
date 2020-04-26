@@ -28,9 +28,10 @@ import io.supercharge.shimmerlayout.ShimmerLayout;
 public class NewsAdapter extends ListAdapter<NewsItem, MyViewHolder> {
     private static final int NORMAL_VIEW_TYPE = 0;
     private static final int FOOTER_VIEW_TYPE = 1;
+    private static final String TAG = "NewsAdapter";
     int footerViewStatus = NewsViewModel.STATUS_LOAD_MORE;
 
-    NewsViewModel model;
+    private NewsViewModel model;
     NewsAdapter(NewsViewModel viewModel){
         super(DIFF_CALLBACK);
         model = viewModel;
@@ -39,7 +40,7 @@ public class NewsAdapter extends ListAdapter<NewsItem, MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
-        MyViewHolder holder = null;
+        MyViewHolder holder;
         if (viewType == NORMAL_VIEW_TYPE){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_cell, parent, false);
             holder = new MyViewHolder(view);
@@ -147,11 +148,13 @@ public class NewsAdapter extends ListAdapter<NewsItem, MyViewHolder> {
     private static final DiffUtil.ItemCallback<NewsItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<NewsItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull NewsItem oldItem, @NonNull NewsItem newItem) {
+            Log.d(TAG, "areContentsTheSame: " + oldItem.toString() + " " + newItem.toString());
             return oldItem == newItem;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull NewsItem oldItem, @NonNull NewsItem newItem) {
+            Log.d(TAG, "areContentsTheSame: " + oldItem.getDocid() + " " + newItem.getDocid());
             return oldItem.getDocid().equals(newItem.getDocid());
         }
     };
@@ -166,7 +169,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     ProgressBar progressBar;
     TextView statusText;
 
-    public MyViewHolder(@NonNull View itemView) {
+    MyViewHolder(@NonNull View itemView) {
         super(itemView);
         shimmerLayout = itemView.findViewById(R.id.shimmerLayoutNews);
         imageView = itemView.findViewById(R.id.imageView);

@@ -26,6 +26,7 @@ import io.supercharge.shimmerlayout.ShimmerLayout;
  * A simple {@link Fragment} subclass.
  */
 public class NewsContentFragment extends Fragment {
+    private static final String TAG = "NewsContentFragment";
     private WebView webView;
 
     public NewsContentFragment() {
@@ -50,10 +51,8 @@ public class NewsContentFragment extends Fragment {
         webView.getSettings().setJavaScriptEnabled(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        Log.d("neturl", getArguments().getString("contentUrl"));
         webView.loadUrl(getArguments().getString("contentUrl"));
     }
 

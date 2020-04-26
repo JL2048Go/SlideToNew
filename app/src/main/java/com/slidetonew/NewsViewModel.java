@@ -34,49 +34,59 @@ public class NewsViewModel extends AndroidViewModel {
     static final int STATUS_NETWORK_ERROR= 2;
 
     private MutableLiveData<List<NewsItem>> _newsLiveData = new MutableLiveData<>();
+    LiveData<List<NewsItem>> newsLiveData;
     LiveData<List<NewsItem>> getNewsLiveData() {
         return _newsLiveData;
     }
-    MutableLiveData<Integer> dataStatusLive = new MutableLiveData<>();
-
-    public LiveData<Integer> getDataStatusLive() {
-        return dataStatusLive;
+    private MutableLiveData<Integer> _dataStatusLive = new MutableLiveData<>();
+    LiveData<Integer> dataStatusLive;
+    LiveData<Integer> getDataStatusLive() {
+        return _dataStatusLive;
     }
 
     /*
-                0: 起始页
-                10: 加载数量10(20)
-                https://3g.163.com/touch/reconstruct/article/list/BBM54PGAwangning/0-10.html
-                 */
+        BBM54PGAwangning： 类型
+       0: 起始页
+       10: 加载数量10(20)
+       https://3g.163.com/touch/reconstruct/article/list/BBM54PGAwangning/0-10.html
+    */         
     private static String urlHead = "https://3g.163.com/touch/reconstruct/article/list/";
     private static String slash = "/";
     private int currentStart = 0;
+    private static int maxPage = 300;
     private static String end = "-20.html";
-    MutableLiveData<String> type;
+    MutableLiveData<String> _type;
+    LiveData<String> type;
+
     LiveData<String> getType() {
-        if (type == null){
-            type = new MutableLiveData<>();
-            type.setValue("BBM54PGAwangning");
+        if (_type == null){
+            _type = new MutableLiveData<>();
+            _type.setValue("BBM54PGAwangning");
         }
-        return type;
+        return _type;
     }
 
     boolean scrollToTop = true;
-    private boolean isNewQuery = true;
+    boolean isNewQuery = true;
     private boolean isLoading = false;
-    void resetQuery(){
+    void resetType(){
         scrollToTop = true;
         fetData();
+        Log.d(TAG, "resetQuery: 执行resetQuery了");
     }
 
     void fetData(){
-        if (isLoading) return;
-        isLoading = true;
-        //加载数量最大300
-        if (currentStart > 300) {
-            dataStatusLive.setValue(STATUS_NO_MORE);
+        Log.d(TAG, "fetData: 现在的数据类型是" + _type.getValue());
+        if (isLoading) {
+            Log.d(TAG, "fetData: 此时的loading" + isLoading);
             return;
         }
+        //加载数量最大300
+        if (currentStart > maxPage) {
+            _dataStatusLive.setValue(STATUS_NO_MORE);
+            return;
+        }
+        isLoading = true;
         String url = urlHead+getType().getValue()+slash+currentStart+end;
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
@@ -84,7 +94,7 @@ public class NewsViewModel extends AndroidViewModel {
                 response -> {
                     String res = response.substring(9, response.length()-1);
                     Gson gson = new GsonBuilder().create();
-                    switch (Objects.requireNonNull(getType().getValue())){
+                    switch (getType().getValue()){
                         case "BBM54PGAwangning" :
                             Log.d(TAG, "fetData: 点击头条啦！");
                             if (isNewQuery){
@@ -105,7 +115,6 @@ public class NewsViewModel extends AndroidViewModel {
                                 Log.d(TAG, "fetData: after " + _newsLiveData.getValue());
                             } else {
                                 //拼接数据
-                                Log.d(TAG, "fetData: 数据有拼接了呢～");
                                 boolean add = _newsLiveData.getValue().addAll(gson.fromJson(res, NewsBean.class).getBA10TA81wangning());
                                 _newsLiveData.setValue(_newsLiveData.getValue());
                             }
@@ -126,13 +135,13 @@ public class NewsViewModel extends AndroidViewModel {
                             break;
 
                     }
-                    dataStatusLive.setValue(STATUS_LOAD_MORE);
+                    _dataStatusLive.setValue(STATUS_LOAD_MORE);
                     isLoading = false;
                     isNewQuery = false;
                     currentStart += 20;
                 },
                 error -> {
-                    dataStatusLive.setValue(STATUS_NETWORK_ERROR);
+                    _dataStatusLive.setValue(STATUS_NETWORK_ERROR);
                     isLoading = false;
                 }
         );
