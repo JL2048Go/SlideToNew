@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:textColor="?attr/main_text_color">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/toutiao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#D8FFEB3B"
+            android:text="头条"
+            android:textStyle="bold"
+            tools:text="头条" />
+
+        <Button
+            android:id="@+id/yule"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFA4B7"
+            android:text="娱乐"
+            android:textStyle="bold"
+            tools:text="娱乐" />
+
+        <Button
+            android:id="@+id/tiyu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#9AEFE861"
+            android:text="体育"
+            android:textStyle="bold"
+            tools:text="体育" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/caijing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#AD6C7B95"
+            android:text="财经"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/junshi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#B43871E4"
+            android:text="军事"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/keji"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#DF50D890"
+            android:text="科技"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/shouji"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#E6DEF6"
+            android:text="手机"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/shuma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#EBF1FAB2"
+            android:text="数码"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/shishang"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#E956BDD4"
+            android:text="时尚"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/youxi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#8FEF3333"
+            android:text="游戏"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/jiaoyu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#A4D7F6"
+            android:text="教育"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/jiankang"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#E4FEB72B"
+            android:text="健康"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/lvyou"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#CD8BC34A"
+            android:text="旅游"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

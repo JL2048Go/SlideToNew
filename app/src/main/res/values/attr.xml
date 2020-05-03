@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    主要字体颜色-->
+    <attr name="main_text_color" format="color" />
+    <!--    主要背景颜色-->
+    <attr name="main_bg_color" format="color" />
+    <!--    主要灰色颜色-->
+    <attr name="main_gray_color" format="color" />
+    <!--    底部按钮背景颜色-->
+    <attr name="main_nav_bg_color" format="color" />
+    <!--    主要返回图标-->
+    <attr name="main_back_icon" format="integer" />
+    <attr name="main_title_color" format="color"/>
+</resources>

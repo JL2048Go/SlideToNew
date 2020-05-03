@@ -24,14 +24,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class NewsViewModel extends AndroidViewModel {
+    private static final String TAG = "NewsViewModel";
+
     public NewsViewModel(@NonNull Application application) {
         super(application);
     }
 
-    private static final String TAG = "NewsViewModel";
     static final int STATUS_LOAD_MORE = 0;
     static final int STATUS_NO_MORE = 1;
     static final int STATUS_NETWORK_ERROR= 2;
+
+    public String title = "头条";
 
     private MutableLiveData<List<NewsItem>> _newsLiveData = new MutableLiveData<>();
     LiveData<List<NewsItem>> newsLiveData;
@@ -45,14 +48,14 @@ public class NewsViewModel extends AndroidViewModel {
     }
 
     /*
-        BBM54PGAwangning： 类型
-       0: 起始页
-       10: 加载数量10(20)
-       https://3g.163.com/touch/reconstruct/article/list/BBM54PGAwangning/0-10.html
-    */         
+            BBM54PGAwangning： 类型
+           0: 起始页
+           10: 加载数量10(20)
+           https://3g.163.com/touch/reconstruct/article/list/BBM54PGAwangning/0-10.html
+        */
     private static String urlHead = "https://3g.163.com/touch/reconstruct/article/list/";
     private static String slash = "/";
-    private int currentStart = 0;
+    int currentStart = 0;
     private static int maxPage = 300;
     private static String end = "-20.html";
     MutableLiveData<String> _type;
@@ -66,27 +69,20 @@ public class NewsViewModel extends AndroidViewModel {
         return _type;
     }
 
-    boolean scrollToTop = true;
     boolean isNewQuery = true;
-    private boolean isLoading = false;
+    boolean isLoading = true;
     void resetType(){
-        scrollToTop = true;
+        currentStart = 0;
+        isNewQuery = true;
         fetData();
-        Log.d(TAG, "resetQuery: 执行resetQuery了");
     }
 
     void fetData(){
-        Log.d(TAG, "fetData: 现在的数据类型是" + _type.getValue());
-        if (isLoading) {
-            Log.d(TAG, "fetData: 此时的loading" + isLoading);
-            return;
-        }
         //加载数量最大300
         if (currentStart > maxPage) {
             _dataStatusLive.setValue(STATUS_NO_MORE);
             return;
         }
-        isLoading = true;
         String url = urlHead+getType().getValue()+slash+currentStart+end;
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
@@ -94,42 +90,121 @@ public class NewsViewModel extends AndroidViewModel {
                 response -> {
                     String res = response.substring(9, response.length()-1);
                     Gson gson = new GsonBuilder().create();
-                    switch (getType().getValue()){
+                    switch (Objects.requireNonNull(getType().getValue())){
                         case "BBM54PGAwangning" :
-                            Log.d(TAG, "fetData: 点击头条啦！");
                             if (isNewQuery){
                                 _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBBM54PGAwangning());
                             } else {
                                 //拼接数据
-                                Log.d(TAG, "fetData: 数据有拼接了呢～");
-                                boolean add = _newsLiveData.getValue().addAll(gson.fromJson(res, NewsBean.class).getBBM54PGAwangning());
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBBM54PGAwangning());
                                 _newsLiveData.setValue(_newsLiveData.getValue());
                             }
                             break;
                         case "BA10TA81wangning" :
-                            Log.d(TAG, "fetData: 点击娱乐啦！");
                             if (isNewQuery){
-                                Log.d(TAG, "fetData: 娱乐执行了呀～");
-                                Log.d(TAG, "fetData: before " + _newsLiveData.getValue());
                                 _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBA10TA81wangning());
-                                Log.d(TAG, "fetData: after " + _newsLiveData.getValue());
                             } else {
                                 //拼接数据
-                                boolean add = _newsLiveData.getValue().addAll(gson.fromJson(res, NewsBean.class).getBA10TA81wangning());
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBA10TA81wangning());
                                 _newsLiveData.setValue(_newsLiveData.getValue());
                             }
                             break;
                         case "BA8E6OEOwangning" :
-                            Log.d(TAG, "fetData: 点击体育啦！");
                             if (isNewQuery){
-                                Log.d(TAG, "fetData: 体育执行了呀～");
-                                Log.d(TAG, "fetData: before " + _newsLiveData.getValue());
                                 _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBA8E6OEOwangning());
-                                Log.d(TAG, "fetData: after " + _newsLiveData.getValue());
                             } else {
                                 //拼接数据
-                                Log.d(TAG, "fetData: 数据有拼接了呢～");
-                                boolean add = _newsLiveData.getValue().addAll(gson.fromJson(res, NewsBean.class).getBA8E6OEOwangning());
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBA8E6OEOwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BA8EE5GMwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBA8EE5GMwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBA8EE5GMwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BAI67OGGwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBAI67OGGwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBAI67OGGwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BA8D4A3Rwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBA8D4A3Rwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBA8D4A3Rwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BAI6I0O5wangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBAI6I0O5wangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBAI6I0O5wangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BAI6JOD9wangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBAI6JOD9wangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBAI6JOD9wangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BA8F6ICNwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBA8F6ICNwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBA8F6ICNwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BAI6RHDKwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBAI6RHDKwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBAI6RHDKwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BA8FF5PRwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBA8FF5PRwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBA8FF5PRwangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BDC4QSV3wangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBDC4QSV3wangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBDC4QSV3wangning());
+                                _newsLiveData.setValue(_newsLiveData.getValue());
+                            }
+                            break;
+                        case "BEO4GINLwangning" :
+                            if (isNewQuery){
+                                _newsLiveData.setValue(gson.fromJson(res, NewsBean.class).getBEO4GINLwangning());
+                            } else {
+                                //拼接数据
+                                boolean add = Objects.requireNonNull(_newsLiveData.getValue()).addAll(gson.fromJson(res, NewsBean.class).getBEO4GINLwangning());
                                 _newsLiveData.setValue(_newsLiveData.getValue());
                             }
                             break;
@@ -142,7 +217,6 @@ public class NewsViewModel extends AndroidViewModel {
                 },
                 error -> {
                     _dataStatusLive.setValue(STATUS_NETWORK_ERROR);
-                    isLoading = false;
                 }
         );
         VolleySingleton.getINSTANCE(getApplication()).requestQueue.add(stringRequest);

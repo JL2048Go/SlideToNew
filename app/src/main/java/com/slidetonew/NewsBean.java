@@ -102,8 +102,8 @@ class NewsItem {
       "imgsrc":"http://cms-bucket.ws.126.net/2020/0408/f55122c9j00q8gfse001ic000s600e3c.jpg",
       "ptime":"2020-04-08 13:35:23"
       * */
-    @SerializedName("liveInfo")
-    private String liveInfo;
+//    @SerializedName("liveInfo")
+//    private String liveInfo;
     @SerializedName("docid")
     private String docid;
     @SerializedName("source")
@@ -129,13 +129,13 @@ class NewsItem {
         return commentCount;
     }
 
-    public String getLiveInfo() {
-        return liveInfo;
-    }
-
-    public void setLiveInfo(String liveInfo) {
-        this.liveInfo = liveInfo;
-    }
+//    public String getLiveInfo() {
+//        return liveInfo;
+//    }
+//
+//    public void setLiveInfo(String liveInfo) {
+//        this.liveInfo = liveInfo;
+//    }
 
     public String getPriority() {
         return priority;
